@@ -3,7 +3,7 @@
   <h3>Lista de personas</h3>
 
   <div class="pb-3">
-      <app-agregar-persona></app-agregar-persona>
+    <app-agregar-persona></app-agregar-persona>
   </div>
 
   <table class="table table-sm table-striped">
@@ -33,4 +33,10 @@
       </tr>
     </tbody>
   </table>
+
+  <div class="text-right">
+    <button type="button" class="btn btn-info" data-toggle="tooltip" title="Refrescar tabla" (click)="recargarComponente()"><i
+        class="fas fa-sync-alt"></i></button>
+  </div>
+
 </div>
