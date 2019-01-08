@@ -65,6 +65,8 @@ Instalación y Configuración de Angular
 	@Query("Persona.findByEdades")
 	public List<Persona> findByEdades(@Param("edad") Integer edad);
 
+15. plugins a instalar en VS Code: Angular 7 Snippets, Beautify, HTML CSS Support, HTML Snippets, vscode-icons, XML, ESLint
+
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ++ configurar git local
   git config --global user.email "you@example.com"
