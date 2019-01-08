@@ -1,3 +1,36 @@
-<p>
-  gestion-personas works!
-</p>
+<div class="container py-5">
+
+  <h3>Lista de personas</h3>
+
+  <div class="pb-3">
+      <app-agregar-persona></app-agregar-persona>
+  </div>
+
+  <table class="table table-sm table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Primer nombre</th>
+        <th scope="col">Segundo nombre</th>
+        <th scope="col">Primer apellido</th>
+        <th scope="col">Segundo apellido</th>
+        <th scope="col">Edad</th>
+        <th scope="col">Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of listaPersonas; let i=index">
+        <th scope="row">{{i+1}}</th>
+        <td>{{p.pnombre}}</td>
+        <td>{{p.snombre}}</td>
+        <td>{{p.papellido}}</td>
+        <td>{{p.sapellido}}</td>
+        <td>{{p.edad}}</td>
+        <td>
+          <app-editar-persona></app-editar-persona>
+          <button type="button" class="btn btn-link" data-toggle="tooltip" title="Eliminar persona"><i class="fas fa-user-minus"></i></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

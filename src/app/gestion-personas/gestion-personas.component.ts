@@ -8,6 +8,12 @@ import { PersonaService } from '../services/persona.service';
 })
 export class GestionPersonasComponent implements OnInit {
 
+  private listaPersonas:any[] = [
+    { pnombre: 'Eduard', snombre: null, papellido: 'Carvajal', sapellido:'Cuéllar', edad: '29' },
+    { pnombre: 'Maria', snombre: 'Fernanda', papellido: 'Castro', sapellido:'Cuarán', edad: '25' },
+    { pnombre: 'Mónica', snombre: '', papellido: 'Carvajal', sapellido:'', edad: '28' },
+  ];
+
   constructor(private _service:PersonaService) { }
 
   ngOnInit() {
