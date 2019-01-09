@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonaService } from '../services/persona.service';
-import { Router } from '@angular/router';
+import { PersonaId, PersonaImpl } from "../modelo/persona.model";
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-gestion-personas',
@@ -14,27 +15,47 @@ export class GestionPersonasComponent implements OnInit {
     { pnombre: 'Maria', snombre: 'Fernanda', papellido: 'Castro', sapellido:'Cuarán', edad: '25' },
     { pnombre: 'Mónica', snombre: '', papellido: 'Carvajal', sapellido:'', edad: '28' },
   ];*/
-  private listaPersonas: Array<any>;
+  private listaPersonas: Array<PersonaId>;
+  private personaDelete: PersonaId = new PersonaImpl;
 
-  constructor(private _service: PersonaService, private _router: Router) { }
+  constructor(private _service: PersonaService) { }
 
   ngOnInit() {
+    this.reloadLista();
+  }
+
+  public preDelete(persona: PersonaId): void {
+    this.personaDelete = persona;
+    console.log(this.personaDelete);
+  }
+
+  public deletePersona(): void {
+    this._service.borrarPersona(this.personaDelete).subscribe(
+      str => { },
+      error => {
+        console.log('Se presentó un error al eliminar la persona:');
+        console.log(error);
+      },
+      () => {
+        this.reloadLista();
+      }
+    )
+  }
+
+  public reloadLista(): void {
     this._service.cargarPersonas().subscribe(
       lista => {
         this.listaPersonas = lista;
+        console.log('Cargando lista...');
       },
-      err => {
-        console.log('Ocurrió un error al cargar la lista:');
-        console.log(err);
+      error => {
+        console.log('Se presentó un error al cargar la lista:');
+        console.log(error);
+      },
+      () => {
+        console.log('Proceso carga de lista terminado');
       }
     );
-  }
-
-  public recargarComponente(): void {
-    //this._router.navigateByUrl('/gestionar');
-    this.ngOnInit();
-    //this._router.navigateByUrl('/gestionar', { skipLocationChange: true });
-    //this._router.navigate(["/gestionar"]);
   }
 
 }

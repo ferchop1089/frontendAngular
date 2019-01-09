@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonaService } from '../services/persona.service';
+import { GestionPersonasComponent } from '../gestion-personas/gestion-personas.component';
+import { PersonaImpl, PersonaId } from '../modelo/persona.model';
 
 @Component({
   selector: 'app-agregar-persona',
@@ -8,15 +10,16 @@ import { PersonaService } from '../services/persona.service';
 })
 export class AgregarPersonaComponent implements OnInit {
 
-  private persona: any = {
+  /*private persona: any = {
     pnombre: '', snombre: '', papellido: '', sapellido: '', edad: ''
-  };
+  };*/
+  private persona:PersonaId = new PersonaImpl;
   private showAlert: boolean = false;
   private tipoAlerta: string = '';
   private tituloAlerta: string = '';
   private mensajeAlerta: string = '';
 
-  constructor(private _service: PersonaService) { }
+  constructor(private _service: PersonaService, private gestionPersonaComp: GestionPersonasComponent) { }
 
   ngOnInit() {
   }
@@ -31,29 +34,27 @@ export class AgregarPersonaComponent implements OnInit {
       this.showAlert = true;
     } else {
       this._service.crearPersona(this.persona).subscribe(
-        personaNueva => {
-          this.limpiarCampos();
-          this.tipoAlerta = 'alert-success';
-          this.tituloAlerta = '';
-          this.mensajeAlerta = 'Persona creada';
-          this.showAlert = true;
-        },
-        err => {
+        pNueva => {},
+        error => {
           this.tipoAlerta = 'alert-danger';
           this.tituloAlerta = 'Error!';
           this.mensajeAlerta = 'Ha ocurrido un error inesperado';
           this.showAlert = true;
           console.log('Ocurrió un error al crear la persona:');
-          console.log(err);
+          console.log(error);
+        },
+        () => {
+          this.limpiarCampos();
+          this.tipoAlerta = 'alert-success';
+          this.tituloAlerta = '';
+          this.mensajeAlerta = 'Persona creada';
+          this.showAlert = true;
+
+          this.gestionPersonaComp.reloadLista();
+          console.log('Persona creada.');
         }
       );
     }
-
-    /*if (this.isValid) {
-      this._service.crearPersona(this.persona);
-    } else {
-      this.mensaje = 'Los campos con * son obligatorios';
-    }*/
   }
 
   public limpiar(): void {
@@ -62,11 +63,11 @@ export class AgregarPersonaComponent implements OnInit {
   }
 
   public limpiarCampos(): void {
-    this.persona.pnombre = '';
-    this.persona.snombre = '';
-    this.persona.papellido = '';
-    this.persona.sapellido = '';
-    this.persona.edad = '';
+    this.persona.pnombre = null;
+    this.persona.snombre = null;
+    this.persona.papellido = null;
+    this.persona.sapellido = null;
+    this.persona.edad = null;
   }
 
   public limpiarAlerta(): void {
