@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './agregar-persona.component.html',
   styleUrls: ['./agregar-persona.component.css']
 })
-export class AgregarPersonaComponent implements OnInit, OnDestroy {
+export class AgregarPersonaComponent implements OnDestroy {
 
   /*private persona: any = {
     pnombre: '', snombre: '', papellido: '', sapellido: '', edad: ''
@@ -23,8 +23,24 @@ export class AgregarPersonaComponent implements OnInit, OnDestroy {
 
   constructor(private _service: PersonaService, private gestionPersonaComp: GestionPersonasComponent) { }
 
-  public ngOnInit(): void {
-    this.crearSubscription = this._service.crearPersonaSubscription().subscribe(
+  public agregar() {
+    let isValid = this._service.validarPersona(this.persona);
+
+    if (!isValid) {
+      this.tipoAlerta = 'alert-warning';
+      this.tituloAlerta = 'Atención!';
+      this.mensajeAlerta = 'Los campos con * son obligatorios';
+      this.showAlert = true;
+    } else {
+      this.addPersona();
+    }
+  }
+
+  private addPersona(): void {
+    if(this.crearSubscription){
+      this.crearSubscription.unsubscribe();
+    }
+    this.crearSubscription = this._service.crearPersona(this.persona).subscribe(
       pNueva => { },
       error => {
         this.tipoAlerta = 'alert-danger';
@@ -45,19 +61,6 @@ export class AgregarPersonaComponent implements OnInit, OnDestroy {
         console.log('Persona creada.');
       }
     );
-  }
-
-  public agregar() {
-    let isValid = this._service.validarPersona(this.persona);
-
-    if (!isValid) {
-      this.tipoAlerta = 'alert-warning';
-      this.tituloAlerta = 'Atención!';
-      this.mensajeAlerta = 'Los campos con * son obligatorios';
-      this.showAlert = true;
-    } else {
-      this._service.crearPersona(this.persona);
-    }
   }
 
   public limpiar(): void {

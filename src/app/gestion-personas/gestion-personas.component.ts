@@ -10,11 +10,6 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class GestionPersonasComponent implements OnInit, OnDestroy {
 
-  /*private listaPersonas:any[] = [
-    { pnombre: 'Eduard', snombre: null, papellido: 'Carvajal', sapellido:'Cuéllar', edad: '29' },
-    { pnombre: 'Maria', snombre: 'Fernanda', papellido: 'Castro', sapellido:'Cuarán', edad: '25' },
-    { pnombre: 'Mónica', snombre: '', papellido: 'Carvajal', sapellido:'', edad: '28' },
-  ];*/
   private listaPersonas: Array<PersonaId>;
   private personaDelete: PersonaId = new PersonaImpl;
   private listaSubscription: Subscription;
@@ -23,17 +18,21 @@ export class GestionPersonasComponent implements OnInit, OnDestroy {
   constructor(private _service: PersonaService) { }
 
   ngOnInit() {
-    this.listaSubscription = this._service.cargarPersonasSubscription().subscribe(
-      lista => this.listaPersonas = lista,
-      error => console.log('Se presentó un error al cargar la lista: ' + error),
-      () => console.log('Proceso carga de lista terminado')
+    this.listarPersonas();
+  }
+
+  private listarPersonas(): void {
+    if (this.listaSubscription) {
+      this.listaSubscription.unsubscribe();
+    }
+    this.listaSubscription = this._service.cargarPersonas().subscribe(
+      lista => {
+        this.listaPersonas = lista;
+        console.log('Datos pasados a listaPersonas:', this.listaPersonas);
+      },
+      error => console.log('Se presentó un error al cargar la lista:', error),
+      () => console.log('Proceso lista personas terminado.')
     );
-    this.borrarSubscription = this._service.borrarPersonaSubscription().subscribe(
-      dato => { },
-      error => console.log('Se presentó un error al borrar la persona: ' + error),
-      () => console.log('Proceso borrado de persona terminado')
-    );
-    this._service.cargarPersonas();
   }
 
   public preDelete(persona: PersonaId): void {
@@ -42,13 +41,22 @@ export class GestionPersonasComponent implements OnInit, OnDestroy {
   }
 
   public deletePersona(): void {
-    this._service.borrarPersona(this.personaDelete);
+    if (this.borrarSubscription) {
+      this.borrarSubscription.unsubscribe();
+    }
+    this.borrarSubscription = this._service.borrarPersona(this.personaDelete).subscribe(
+      data => {
+        console.log('recargando la lista, pues se eliminó una pesona.'); 
+        this.reloadLista();
+      },
+      error => console.log('Se presentó un error al borrar la persona: ' + error),
+      () => console.log('Proceso borrado de persona terminado.')
+    );
   }
 
   public reloadLista(): void {
-    this._service.reloadPersonas();
+    this.listarPersonas();
   }
-
 
   public ngOnDestroy(): void {
     this.listaSubscription.unsubscribe();

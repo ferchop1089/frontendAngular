@@ -25,7 +25,11 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              {"input": "js/jquery.slim.min.js", "lazy": true},
+              {"input": "js/popper.min.js", "lazy": true},
+              {"input": "js/bootstrap.min.js", "lazy": true}
+            ]
           },
           "configurations": {
             "production": {
