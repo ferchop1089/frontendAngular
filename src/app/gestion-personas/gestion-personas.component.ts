@@ -45,10 +45,7 @@ export class GestionPersonasComponent implements OnInit, OnDestroy {
       this.borrarSubscription.unsubscribe();
     }
     this.borrarSubscription = this._service.borrarPersona(this.personaDelete).subscribe(
-      data => {
-        console.log('recargando la lista, pues se eliminó una pesona.'); 
-        this.reloadLista();
-      },
+      data => this.reloadLista(),
       error => console.log('Se presentó un error al borrar la persona: ' + error),
       () => console.log('Proceso borrado de persona terminado.')
     );

@@ -27,7 +27,6 @@ export class PersonaService {
   }
 
   public borrarPersona(persona: PersonaId) {
-    console.log('entró a borrar la persona con el id:', persona.id)
     return this._http.delete(`${this.baseURL + '/borrarPorId'}/${persona.id}`, { responseType: 'text' });
   }
 
